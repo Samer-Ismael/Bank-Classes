@@ -1,14 +1,21 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Account {
-    double AccountNumber;
-    double AccountBalance;
-    public Account(double accountNumber, double accountBalance) {
-        AccountNumber = accountNumber;
-        AccountBalance = accountBalance;
+    ArrayList<Object> Accounts;
+    String AccountNumber = null;
+    double AccountBalance = 0;
+    String accountName;
+    int pinCod;
+    public Account(String accountName, int pinCod) {
+        this.accountName = accountName;
+        this.pinCod = pinCod;
+        this.Accounts = new ArrayList<>();
     }
-    public double getAccountNumber() {
+    public String getAccountNumber() {
         return AccountNumber;
     }
-    public void setAccountNumber(double accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         AccountNumber = accountNumber;
     }
     public double getAccountBalance() {
@@ -16,5 +23,26 @@ public class Account {
     }
     public void setAccountBalance(double accountBalance) {
         AccountBalance = accountBalance;
+    }
+    public void deposit (double input){
+        AccountBalance += input;
+    }
+    public void withdraw (double input){
+        AccountBalance -= input;
+    }
+    public String newAccountNumber (){
+        Random rand = new Random();
+        String AccountNumber = rand.nextInt(1000, 9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999);
+        return AccountNumber;
+    }
+    public Object addNewAccount (Object account){
+        return Accounts.add(account);
+    }
+    public void manageAccounts (){
+
+        for (int i = 0; i < Accounts.size(); i++) {
+            System.out.println(Accounts.get(i));
+
+        }
     }
 }
