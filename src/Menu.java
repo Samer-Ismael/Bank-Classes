@@ -6,11 +6,10 @@ public class Menu {
         System.out.println("Welcome to the bank app");
         System.out.println("------------------");
         System.out.println("Create new account");
-        CreateNewAccount();
-        manageList();
+        CreateNewAccounts();
 
     }
-    public void CreateNewAccount (){
+    public void CreateNewAccounts(){
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter account name: ");
         String input1 = scan.next();
@@ -24,15 +23,25 @@ public class Menu {
         System.out.println(account.getAccountNumber());
         account.addNewAccount(account);
 
-        System.out.print("Your MasterCard number: ");
         MasterCard card = new MasterCard(input1, input2);
-
+        System.out.print("Your MasterCard number: ");
+        card.setCardNumber(card.newCardNumber());
+        System.out.print(card.getCardNumber());
+        System.out.println();
         Credit credit = new Credit(1500);
         System.out.print("Your credit limit is: ");
+        System.out.print(credit.getCreditLimit());
+        System.out.println();
+        SavingAccount saving = new SavingAccount();
+        System.out.println("--------------------");
+
+        while (true) {
+            manageList(card,account,credit,saving);
+        }
 
 
     }
-    public void manageList (MasterCard card, Account account, Credit credit){
+    public void manageList (MasterCard card, Account account, Credit credit, SavingAccount saving){
         System.out.println("1- change PinCode");
         System.out.println("2- card payment");
         System.out.println("3- deposit");
@@ -46,92 +55,122 @@ public class Menu {
 
         if (inout == 1) {
             ChangePinCode(card, scan);
+            System.out.println("----------");
         }
         if (inout == 2) {
-            cardPayment(account, credit, scan);
+            cardPayment(account, credit, scan, card);
+            System.out.println("----------");
         }
         if (inout == 3) {
-            System.out.println("Enter amount: ");
-            int amount = scan.nextInt();
-            account.setAccountBalance(account.AccountBalance + amount);
+            deposit(account, scan);
+            System.out.println("----------");
         }
         if (inout == 4) {
-            withdraw(account, credit, scan);
+            withdraw(account, credit, scan, card);
+            System.out.println("----------");
         }
         if (inout == 5) {
-            save(account, scan);
+            save(account, scan, saving);
+            System.out.println("----------");
         }
         if (inout == 6) {
-
-
-            System.out.println("Enter amount:");
-            double amount = scan.nextDouble();
-
-            //Do saving account
-
+            outFromSaving(saving, scan, account);
+            System.out.println("----------");
         }
         if (inout == 7) {
             System.exit(0);
         }
-
-
-
-
-
-
-
-
+        System.out.println( "Account balance: " + account.getAccountBalance());
+        System.out.println("Saving account balance: " + saving.getBalance());
+        System.out.println( "Credit limit: " + credit.getCreditLimit());
+        System.out.println("----------");
     }
 
-    private static void save(Account account, Scanner scan) {
+    private static void deposit(Account account, Scanner scan) {
+        System.out.println("Enter amount: ");
+        int amount = scan.nextInt();
+        if (amount > 0) {
+            account.setAccountBalance(account.AccountBalance + amount);
+        } else {
+            System.out.println("Not allowed");
+        }
+    }
+    private static void save(Account account, Scanner scan, SavingAccount saving) {
+
         System.out.println("Enter amount:");
         double amount = scan.nextDouble();
-
-        if (amount > account.AccountBalance) {
-            account.setAccountBalance(account.AccountBalance + amount);
+        if (amount <= account.AccountBalance && amount > 0) {
+            account.AccountBalance -= amount;
+            saving.balance += amount;
         }else {
             System.out.println("you don't have enough money");
         }
     }
+    private static void outFromSaving(SavingAccount saving, Scanner scan, Account account) {
+        System.out.println("Enter amount");
+        double amount = scan.nextDouble();
 
-    private static void withdraw(Account account, Credit credit, Scanner scan) {
-        System.out.println("Enter Pin Cod: ");
-        int pinCheck = scan.nextInt();
-        while (pinCheck != account.pinCod) {
-            System.out.println("Wrong pin!");
+        if (amount <= saving.balance && amount > 0) {
+            saving.balance -= amount;
+            account.AccountBalance += amount;
+        } else {
+            System.out.println("You don't have enough money");
         }
+    }
+    private static void withdraw(Account account, Credit credit, Scanner scan, MasterCard card) {
+        pinCheck(scan, card);
+
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
-        if (amount < account.getAccountBalance() && credit.CreditLimit > credit.CreditLimit - 150) {
-            //Will not allow withdrew mor than 150 from credit.
+        if (amount <= account.getAccountBalance() && credit.CreditLimit >= 1000) {
+            //Will not allow withdrew mor than 500 from credit.
             account.setAccountBalance(account.AccountBalance - amount);
         } else {
             System.out.println("You don't have enough money!");
         }
     }
 
-    private static void cardPayment(Account account, Credit credit, Scanner scan) {
-        System.out.println("Enter Pin Cod: ");
-        int pinCheck = scan.nextInt();
-        while (pinCheck != account.pinCod) {
+    private static void pinCheck(Scanner scan, MasterCard card) {
+        while (true) {
+            System.out.println("Enter Pin Cod: ");
+            int pinCheck = scan.nextInt();
+            if (pinCheck == card.pinCode) {
+                break;
+            }
             System.out.println("Wrong pin!");
         }
+    }
+
+    private static void cardPayment(Account account, Credit credit, Scanner scan, MasterCard card) {
+
+        pinCheck(scan, card);
 
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
-        if (amount < account.getAccountBalance() && amount < credit.CreditLimit) {
+        if (amount <= account.AccountBalance && amount < credit.CreditLimit && amount > 0) {
             account.setAccountBalance(account.AccountBalance - amount);
+        }
+        if (amount > account.AccountBalance && amount < credit.CreditLimit && amount > 0) {
+            double left = amount - account.AccountBalance;
+            account.AccountBalance = 0;
+            credit.CreditLimit -= left;
+        }
+        if (amount < 0) {
+            System.out.println("Not allowed!");
         } else {
             System.out.println("You don't have enough money!");
         }
     }
-
     private static void ChangePinCode(MasterCard card, Scanner scan) {
+
         System.out.println("Enter new PinCode 4 digits: ");
         int newPin = scan.nextInt();
         card.setPinCode(newPin);
         System.out.println("Your new PinCode is " + card.getPinCode());
     }
+
+
+
 
 
 }
