@@ -75,15 +75,15 @@ public class Menu {
             System.out.println("----------");
         }
         if (input == 4) {
-            withdraw(account, credit,card, state);
+            withdraw(account, credit, card, state);
             System.out.println("----------");
         }
         if (input == 5) {
-            save(account,saving, state);
+            save(account, saving, state);
             System.out.println("----------");
         }
         if (input == 6) {
-            outFromSaving(saving,account, state);
+            outFromSaving(saving, account, state);
             System.out.println("----------");
         }
         if (input == 7) {
@@ -109,7 +109,7 @@ public class Menu {
                 credit.CreditLimit = 1500;
                 state.addToList("Deposit ", amount);
             }
-        }else {
+        } else {
             System.out.println("Not allowed");
         }
     }
@@ -148,12 +148,19 @@ public class Menu {
 
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
-        if (amount <= account.getAccountBalance() && credit.CreditLimit >= 1000) {
-            //Will not allow withdrew mor than 500 from credit.
-            account.setAccountBalance(account.AccountBalance - amount);
-            state.addToList("Withdraw ", amount);
-        } else {
-            System.out.println("You don't have enough money!");
+
+        if (account.AccountBalance > amount) {
+            account.AccountBalance -= amount;
+            state.addToList("Withdraw", amount);
+        }
+        if (account.AccountBalance < amount) {
+            double left = amount - account.AccountBalance;
+            if (credit.CreditLimit - left >= 1000) {
+                credit.CreditLimit -= left;
+                account.AccountBalance = 0;
+            } else {
+                System.out.println("You are not allow to withdraw more than 500 from credit!");
+            }
         }
     }
 
