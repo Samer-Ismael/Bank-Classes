@@ -6,5 +6,4 @@ public class Main {
 
     }
 
-    //Hej doesn't play for the money he wins, he don't play for respect
 }
