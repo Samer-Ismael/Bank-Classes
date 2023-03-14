@@ -73,8 +73,6 @@ public class Menu {
         Scanner scan = new Scanner(System.in);
 
         if (checkIfInteger(scan)) { //Will check if input is number
-            //I could do streams() here and make range 1,8, but it will not work with other methods, so I did all methods the same way.
-
             int input = scan.nextInt();
             if (input >= 1 && input <= 8) { // Will enter this loop when number is 1 - 8.
                 if (input == 1) {
