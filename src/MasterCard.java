@@ -14,15 +14,6 @@ public class MasterCard {
     public void setCardNumber(String cardNumber) {
         CardNumber = cardNumber;
     }
-    public double getCardBalance() {
-        return CardBalance;
-    }
-    public void setCardBalance(double cardBalance) {
-        CardBalance = cardBalance;
-    }
-    public void pay (double input){
-        CardBalance -= input;
-    }
     public String newCardNumber (){
         Random rand = new Random();
         String CardNumber = rand.nextInt(1000, 9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999);

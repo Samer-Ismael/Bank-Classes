@@ -27,13 +27,14 @@ public class Menu {
         card.setCardNumber(card.newCardNumber());
         System.out.print(card.getCardNumber());
         System.out.println();
+
         Credit credit = new Credit(1500);
         System.out.print("Your credit limit is: ");
         System.out.print(credit.getCreditLimit());
         System.out.println();
+
         SavingAccount saving = new SavingAccount();
         System.out.println("--------------------");
-
         Statement state = new Statement();
 
         while (true) {
@@ -170,30 +171,34 @@ public class Menu {
 
     private static void pinCheck(MasterCard card) {
         Scanner scan = new Scanner(System.in);
-        while (true) {
+        int counter = 3;
+        while (counter > 0) {
+            counter--;
             System.out.println("Enter Pin Cod: ");
             int pinCheck = scan.nextInt();
             if (pinCheck == card.getPinCode()) {
                 break;
             }
             System.out.println("Wrong pin!");
+            if (counter == 0) {
+                System.out.println("You have entered wrong pin code 3 times.");
+                System.exit(0);
+            }
         }
     }
 
     private static void cardPayment(Account account, Credit credit, MasterCard card, Statement state) {
         Scanner scan = new Scanner(System.in);
-
         pinCheck(card);
-
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
 
         if (amount > 0) {
-            if (amount <= account.getAccountBalance() && amount < credit.getCreditLimit() && amount > 0) {
+            if (amount <= account.getAccountBalance() && amount < credit.getCreditLimit()) {
                 account.setAccountBalance(account.getAccountBalance() - amount);
                 state.addToList("Card Payment ", amount);
             }
-            if (amount > account.getAccountBalance() && amount <= credit.getCreditLimit() && amount > 0) {
+            if (amount > account.getAccountBalance() && amount <= credit.getCreditLimit()) {
                 double left = amount - account.getAccountBalance();
                 account.setAccountBalance(0);
                 credit.setCreditLimit(credit.getCreditLimit() - left);
