@@ -1,9 +1,9 @@
 import java.util.Random;
 public class MasterCard {
-    String CardNumber = null;
-    double CardBalance = 0;
-    int pinCode;
-    String name;
+    private String CardNumber = null;
+    private double CardBalance = 0;
+    private int pinCode;
+    private String name;
     public MasterCard(String name, int pinCode) {
         this.name = name;
         this.pinCode = pinCode;

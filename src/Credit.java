@@ -1,5 +1,5 @@
 public class Credit {
-    double CreditLimit;
+    private double CreditLimit;
     public Credit(double creditLimit) {
         CreditLimit = creditLimit;
     }

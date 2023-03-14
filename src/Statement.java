@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class Statement {
-    ArrayList<Object> statement;
+    private ArrayList<Object> statement;
     public Statement() {
         this.statement = new ArrayList<>();
     }

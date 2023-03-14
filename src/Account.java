@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Account {
-    ArrayList<Object> Accounts;
-    String AccountNumber = null;
-    double AccountBalance = 0;
-    String accountName;
+    private ArrayList<Object> Accounts;
+    private String AccountNumber = null;
+    private double AccountBalance;
+    private String accountName;
     int pinCod;
     public Account(String accountName, int pinCod) {
         this.accountName = accountName;

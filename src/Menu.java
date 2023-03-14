@@ -101,12 +101,12 @@ public class Menu {
         int amount = scan.nextInt();
         if (amount > 0) {
 
-            credit.CreditLimit += amount;
+            credit.setCreditLimit(credit.getCreditLimit() + amount);;
 
-            if (credit.CreditLimit > 1500) {
-                double left = credit.CreditLimit - 1500;
-                account.AccountBalance += left;
-                credit.CreditLimit = 1500;
+            if (credit.getCreditLimit() > 1500) {
+                double left = credit.getCreditLimit() - 1500;
+                account.setAccountBalance(account.getAccountBalance() + left);
+                credit.setCreditLimit(1500);
                 state.addToList("Deposit ", amount);
             }
         } else {
@@ -119,8 +119,8 @@ public class Menu {
 
         System.out.println("Enter amount:");
         double amount = scan.nextDouble();
-        if (amount <= account.AccountBalance && amount > 0) {
-            account.AccountBalance -= amount;
+        if (amount <= account.getAccountBalance() && amount > 0) {
+            account.setAccountBalance(account.getAccountBalance() - amount);
             saving.balance += amount;
             state.addToList("Saving ", amount);
         } else {
@@ -135,7 +135,7 @@ public class Menu {
 
         if (amount <= saving.balance && amount > 0) {
             saving.balance -= amount;
-            account.AccountBalance += amount;
+            account.setAccountBalance(account.getAccountBalance() + amount);
             state.addToList("Saving ", -amount);
         } else {
             System.out.println("You don't have enough money");
@@ -149,18 +149,22 @@ public class Menu {
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
 
-        if (account.AccountBalance > amount) {
-            account.AccountBalance -= amount;
-            state.addToList("Withdraw", amount);
-        }
-        if (account.AccountBalance < amount) {
-            double left = amount - account.AccountBalance;
-            if (credit.CreditLimit - left >= 1000) {
-                credit.CreditLimit -= left;
-                account.AccountBalance = 0;
-            } else {
-                System.out.println("You are not allow to withdraw more than 500 from credit!");
+        if (amount > 0) {
+            if (account.getAccountBalance() > amount) {
+                account.setAccountBalance(account.getAccountBalance() - amount);
+                state.addToList("Withdraw", amount);
             }
+            if (account.getAccountBalance() < amount) {
+                double left = amount - account.getAccountBalance();
+                if (credit.getCreditLimit() - left >= 1000) {
+                    credit.setCreditLimit(credit.getCreditLimit() - left);
+                    account.setAccountBalance(0);
+                } else {
+                    System.out.println("You are not allow to withdraw more than 500 from credit!");
+                }
+            }
+        } else {
+            System.out.println("Nice try!");
         }
     }
 
@@ -169,7 +173,7 @@ public class Menu {
         while (true) {
             System.out.println("Enter Pin Cod: ");
             int pinCheck = scan.nextInt();
-            if (pinCheck == card.pinCode) {
+            if (pinCheck == card.getPinCode()) {
                 break;
             }
             System.out.println("Wrong pin!");
@@ -183,20 +187,22 @@ public class Menu {
 
         System.out.println("Enter Amount: ");
         double amount = scan.nextDouble();
-        if (amount <= account.AccountBalance && amount < credit.CreditLimit && amount > 0) {
-            account.setAccountBalance(account.AccountBalance - amount);
-            state.addToList("Card Payment ", amount);
-        }
-        if (amount > account.AccountBalance && amount < credit.CreditLimit && amount > 0) {
-            double left = amount - account.AccountBalance;
-            account.AccountBalance = 0;
-            credit.CreditLimit -= left;
-            state.addToList("Card Payment ", amount);
-        }
-        if (amount < 0) {
-            System.out.println("Not allowed!");
+
+        if (amount > 0) {
+            if (amount <= account.getAccountBalance() && amount < credit.getCreditLimit() && amount > 0) {
+                account.setAccountBalance(account.getAccountBalance() - amount);
+                state.addToList("Card Payment ", amount);
+            }
+            if (amount > account.getAccountBalance() && amount <= credit.getCreditLimit() && amount > 0) {
+                double left = amount - account.getAccountBalance();
+                account.setAccountBalance(0);
+                credit.setCreditLimit(credit.getCreditLimit() - left);
+                state.addToList("Card Payment ", amount);
+            } else {
+                System.out.println("You don't have enough money!");
+            }
         } else {
-            System.out.println("You don't have enough money!");
+            System.out.println("Nice try!");
         }
     }
 
