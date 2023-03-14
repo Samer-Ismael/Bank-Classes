@@ -9,39 +9,47 @@ public class Menu {
     }
 
     public void CreateNewAccounts() {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter account name: ");
-        String input1 = scan.next();
-        System.out.println("Enter your Pin code: ");
-        int input2 = scan.nextInt();
-
-
-        Account account = new Account(input1, input2);
-
-        System.out.print("Your new account number: ");
-        account.setAccountNumber(account.newAccountNumber());
-        System.out.println(account.getAccountNumber());
-        account.addNewAccount(account);
-
-        MasterCard card = new MasterCard(input1, input2);
-        System.out.print("Your MasterCard number: ");
-        card.setCardNumber(card.newCardNumber());
-        System.out.print(card.getCardNumber());
-        System.out.println();
-
-        Credit credit = new Credit(1500);
-        System.out.print("Your credit limit is: ");
-        System.out.print(credit.getCreditLimit());
-        System.out.println();
-
-        SavingAccount saving = new SavingAccount();
-        System.out.println("--------------------");
-        Statement state = new Statement();
-
-        while (true) {
-            //Will run until the user chose to exit by entering number 8
-            manageList(card, account, credit, saving, state);
+        Scanner name = new Scanner(System.in);
+        System.out.println("Enter account name or type Exit to close the program: ");
+        String input1 = name.next();
+        if (input1.equalsIgnoreCase("exit")) {
+            System.exit(0);
         }
+        System.out.println("Enter your Pin code: ");
+        Scanner scan = new Scanner(System.in);
+
+        if (checkIfInteger(scan)) {
+            int input2 = scan.nextInt();
+
+            Account account = new Account(input1, input2);//New account
+            System.out.print("Your new account number: ");
+            account.setAccountNumber(account.newAccountNumber());
+            System.out.println(account.getAccountNumber());
+            account.addNewAccount(account);
+
+            MasterCard card = new MasterCard(input1, input2);//New MasterCard
+            System.out.print("Your MasterCard number: ");
+            card.setCardNumber(card.newCardNumber());
+            System.out.print(card.getCardNumber());
+            System.out.println();
+
+            Credit credit = new Credit(1500);//New credit
+            System.out.print("Your credit limit is: ");
+            System.out.print(credit.getCreditLimit());
+            System.out.println();
+
+            SavingAccount saving = new SavingAccount();//New saving account
+            System.out.println("--------------------");
+            Statement state = new Statement();
+
+            while (true) {
+                //Will run until the user chose to exit by entering number 8
+                manageList(card, account, credit, saving, state);
+            }
+        } else {
+            System.out.println("Invalid input!");
+        }
+        CreateNewAccounts();
     }
 
     public void manageList(MasterCard card, Account account, Credit credit, SavingAccount saving, Statement state) {
@@ -63,9 +71,9 @@ public class Menu {
 
     private static void takeInputs(MasterCard card, Account account, Credit credit, SavingAccount saving, Statement state) {
         Scanner scan = new Scanner(System.in);
-        boolean Check = checkIfInteger(scan);
 
-        if (Check) {
+        if (checkIfInteger(scan)) { //Will check if input is number
+
             int input = scan.nextInt();
             if (input >= 1 && input <= 8) { // Will enter this loop when number is 1 - 8.
                 if (input == 1) {
@@ -112,10 +120,9 @@ public class Menu {
     private static void deposit(Account account, Statement state, Credit credit) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter amount: ");
-        double amount;
 
         if (scan.hasNextDouble()) { // Will allow only number to be entered
-            amount = scan.nextDouble();
+            double amount = scan.nextDouble();
             if (amount > 0) { // Loop will not allow deposit in minus.
                 credit.setCreditLimit(credit.getCreditLimit() + amount);
                 // Will fill the credit if it's less than 1500 first and then set the rest in the balance.
@@ -138,10 +145,9 @@ public class Menu {
     private static void save(Account account, SavingAccount saving, Statement state) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter amount:");
-        double amount;
 
         if (scan.hasNextDouble()) { // Will allow only number
-            amount = scan.nextDouble();
+            double amount = scan.nextDouble();
             //Will only send money to saving account
             if (amount <= account.getAccountBalance() && amount > 0) {
                 account.setAccountBalance(account.getAccountBalance() - amount);
@@ -175,7 +181,6 @@ public class Menu {
     }
 
     private static void withdraw(Account account, Credit credit, MasterCard card, Statement state) {
-        Scanner pin = new Scanner(System.in);
         pinCheck(card); // This will ask for pin code and check if it's right.
         System.out.println("Enter Amount: ");
         Scanner scan = new Scanner(System.in);
@@ -235,6 +240,7 @@ public class Menu {
         pinCheck(card);
         System.out.println("Enter Amount: ");
         Scanner scan = new Scanner(System.in);
+
         if (checkIfDouble(scan)) {
             double amount = scan.nextDouble();
 
@@ -263,6 +269,7 @@ public class Menu {
 
     private static void ChangePinCode(MasterCard card) {
         Scanner scan = new Scanner(System.in);
+
         pinCheck(card); //Will check the old pin code
         System.out.println("Enter new Pin code: ");
         int newPin = scan.nextInt();
@@ -271,17 +278,12 @@ public class Menu {
     }
 
     private static boolean checkIfInteger(Scanner scan) {
-        boolean itIs = false;
-        if (scan.hasNextInt()) {
-            itIs = true;
-        }
+        boolean itIs = scan.hasNextInt();
         return itIs;
     }
+
     private static boolean checkIfDouble(Scanner scan) {
-        boolean itIs = false;
-        if (scan.hasNextDouble()) {
-            itIs = true;
-        }
+        boolean itIs = scan.hasNextDouble();
         return itIs;
     }
 }
