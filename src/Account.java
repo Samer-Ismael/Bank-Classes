@@ -24,25 +24,13 @@ public class Account {
     public void setAccountBalance(double accountBalance) {
         AccountBalance = accountBalance;
     }
-    public void deposit (double input){
-        AccountBalance += input;
-    }
-    public void withdraw (double input){
-        AccountBalance -= input;
-    }
+
     public String newAccountNumber (){
         Random rand = new Random();
         String AccountNumber = rand.nextInt(1000, 9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999) + "-" + rand.nextInt(1000,9999);
         return AccountNumber;
     }
-    public Object addNewAccount (Object account){
-        return Accounts.add(account);
-    }
-    public void manageAccounts (){
-
-        for (int i = 0; i < Accounts.size(); i++) {
-            System.out.println(Accounts.get(i));
-
-        }
+    public void addNewAccount (Object account){
+        Accounts.add(account);
     }
 }
